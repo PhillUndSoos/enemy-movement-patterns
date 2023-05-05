@@ -7,34 +7,63 @@ const ctx = canvas.getContext('2d');
 //sets CANVAS_HEIGHT to and WIDTH equal to HTML's canvas dimensions for context in our JS file
 CANVAS_WIDTH = canvas.width = 500;
 CANVAS_HEIGHT = canvas.height = 1000;
+//sets the amount of enemys. the value is used in the loop that creates instances of enemy objects
 const amountOfEnemys = 10;
+//enemy objects will be saved in this array
 const enemiesArray = [];
+
+//creates a new HTMLImageElement and saves it to a constant variable
+const enemyImage1 = new Image();
+//The source of the image is set here
+let gameFrame = 0;
 
 //Factory for enemy objects
 class Enemy {
     //this constructs our enemy objects
     constructor() {
+        this.image = new Image();
+        this.image.src = './media/enemy1.png'
+        //the following 2 lines randomly generate a starting position on the canvas
         this.x = Math.random() * canvas.width;
         this.y = Math.random() * canvas.height;
-        this.width = 100;
-        this.height = 100;
+        //the following line randomly generates the speed of the object | f.e.: random() * 4 - 2 is equal to -2 to 2 
+        this.speed = Math.random() * 4 - 2;
+        //this sets the sprideWidth and spriteHeight
+        this.spriteWidth = 293;
+        this.spriteHeight = 155;
+        //this scales the width and height using spriteWidth and spriteHeight as reference
+        this.width = this.spriteWidth / 2.5;
+        this.height = this.spriteHeight / 2.5;
+        //sets the frame of the sprite, if increased by one, the next sprite (frame) is selected
+        this.frame = 0;
+        //this sets the animation speed of the sprites to a random number between 1 and 4
+        this.flapSpeed = Math.floor(Math.random() * 3 + 1);
+
     }
     //this method, when called, updates the position of the object it gets called on, making it move.
     update() {
-        this.x++
-        this.y++
+        this.x += this.speed
+        this.y += this.speed
+        //animate sprites, if gameFrame / 2 remainder is 0, then execute animation frame (to slow the animation down)
+        if (gameFrame % this.flapSpeed === 0) {
+            //picking frame 1-4, if higher, resets back to frame 0
+            this.frame > 4 ? this.frame = 0 : this.frame++;
+        }
+        
+        
     }
     //this method draws the constructed object at set coordiantes with set dimensions(size)
     draw() {
-        ctx.fillRect(this.x, this.y, this.width, this.height);
+        //ctx.strokeRect(this.x, this.y, this.width, this.height);
+        //This draws the image. Syntax explanation here: "https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/drawImage"
+        //this.frame * this.spriteWidth makes it so if sprite.frame is increased by one, the 2nd sprite of the picture is used
+        ctx.drawImage(this.image, this.frame * this.spriteWidth, 0, this.spriteWidth, this.spriteHeight, this.x, this.y, this.width, this.height)
     }
 }
 //a loop that loops amountOfEnemys'th times and creates a new instance of an enemy object and pushes it into enemiesArray for each iteration
 for (let i = 0; i < amountOfEnemys; i++) {
     enemiesArray.push(new Enemy());
 }
-
-console.log(enemiesArray)
 
 //this is the animation
 function animate() {
@@ -45,6 +74,7 @@ function animate() {
         enemy.update();
         enemy.draw();
     });
+    gameFrame++;
     //tells the browser to perform an animaton, invoking the callback passed in
     requestAnimationFrame(animate);
 }
