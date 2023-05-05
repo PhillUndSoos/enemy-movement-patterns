@@ -3,7 +3,7 @@
 /** @type {HTMLCanvasElement} */
 
 //references canvas1 in index.HTML
-const canvas = document.getElementById('canvas3');
+const canvas = document.getElementById('canvas1');
 
 //sets the rendering context of canvas to two-dimensional rendering
 const ctx = canvas.getContext('2d');
