@@ -23,27 +23,30 @@ class Enemy {
     constructor() {
         this.image = new Image();
         this.image.src = './media/enemy1.png'
-        //the following 2 lines randomly generate a starting position on the canvas
-        this.x = Math.random() * canvas.width;
-        this.y = Math.random() * canvas.height;
         //the following line randomly generates the speed of the object | f.e.: random() * 4 - 2 is equal to -2 to 2 
-        this.speed = Math.random() * 4 - 2;
+        // this.speed = Math.random() * 4 - 2;
         //this sets the sprideWidth and spriteHeight
         this.spriteWidth = 293;
         this.spriteHeight = 155;
         //this scales the width and height using spriteWidth and spriteHeight as reference
         this.width = this.spriteWidth / 2.5;
         this.height = this.spriteHeight / 2.5;
+        //the following 2 lines randomly generate a starting position on the canvas
+        this.x = Math.random() * (canvas.width - this.width);
+        this.y = Math.random() * (canvas.height - this.height);
         //sets the frame of the sprite, if increased by one, the next sprite (frame) is selected
         this.frame = 0;
         //this sets the animation speed of the sprites to a random number between 1 and 4
         this.flapSpeed = Math.floor(Math.random() * 3 + 1);
+        this.moveSpeed = Math.floor(Math.random() * 10 + 1);
 
     }
     //this method, when called, updates the position of the object it gets called on, making it move.
     update() {
-        this.x += this.speed
-        this.y += this.speed
+        if (gameFrame % this.moveSpeed === 0) {
+            this.x += Math.random() * 15 - 7.5;
+            this.y += Math.random() * 15 - 7.5;
+        }
         //animate sprites, if gameFrame / 2 remainder is 0, then execute animation frame (to slow the animation down)
         if (gameFrame % this.flapSpeed === 0) {
             //picking frame 1-4, if higher, resets back to frame 0
