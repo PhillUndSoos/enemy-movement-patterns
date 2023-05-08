@@ -22,7 +22,6 @@ const enemiesArray = [];
 //creates a new HTMLImageElement and saves it to a constant variable
 const enemyImage1 = new Image();
 
-//The source of the image is set here
 let gameFrame = 0;
 
 
@@ -88,6 +87,8 @@ class Enemy {
 for (let i = 0; i < amountOfEnemys; i++) {
     enemiesArray.push(new Enemy());
 }
+
+console.log(`arr 1 ${enemiesArray}`)
 
 //this is the animation
 function animate() {
